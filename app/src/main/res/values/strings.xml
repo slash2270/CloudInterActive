@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CloudInterActive_TangLing</string>
+    <string name="btnApi">Request Api</string>
+    <string name="tvName">唐麟</string>
+</resources>

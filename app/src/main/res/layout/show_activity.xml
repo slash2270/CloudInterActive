@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rltShow"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.ShowActivity">
+
+    <ImageView
+        android:id="@+id/ivShow"
+        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/tvId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvthumUrl"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:text="id" />
+
+    <TextView
+        android:id="@+id/tvthumUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="12sp"
+        android:text="thumbnailUrl" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvthumUrl"
+        android:layout_centerHorizontal="true"
+        android:textSize="10sp"
+        android:text="title" />
+
+</RelativeLayout>
