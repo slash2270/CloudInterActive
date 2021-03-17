@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -101,7 +102,7 @@ public class Function {
 
             gridView.setSelection(gvPosition);
 
-            //    Log.d(TAG,"取值 gvPosition +" + gvPosition);
+        //        Log.d(TAG,"取值 gvPosition +" + gvPosition);
 
         }
 

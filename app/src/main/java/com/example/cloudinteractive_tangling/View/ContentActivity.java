@@ -153,7 +153,7 @@ public class ContentActivity extends AppCompatActivity{
                 strThumColor = arrContentItem.getArrStrThumColor(arrListContent, position, strThumColor);
 
                 intent = new Intent(ContentActivity.this, ShowActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 bundle.putString("idKey", strId);
                 bundle.putString("titleKey", strTitle);
@@ -180,6 +180,10 @@ public class ContentActivity extends AppCompatActivity{
 
                     case 0:      //靜止
 
+                        gvPosition = view.getFirstVisiblePosition();
+
+                        spEditor.putInt("gvPosition", gvPosition).commit();
+
                         break;
 
                     case 1:      //手滑
@@ -188,13 +192,17 @@ public class ContentActivity extends AppCompatActivity{
 
                         spEditor.putInt("gvPosition", gvPosition).commit();
 
-                   //     Log.d(function.TAG,"送值 gvPosition +" + gvPosition);
-
                         break;
 
                     case 2:      //自動滑
 
+                        gvPosition = view.getFirstVisiblePosition();
+
+                        spEditor.putInt("gvPosition", gvPosition).commit();
+
                         break;
+
+                    //     Log.d(function.TAG,"送值 gvPosition +" + gvPosition);
 
                 }
 
@@ -213,7 +221,6 @@ public class ContentActivity extends AppCompatActivity{
     public void onBackPressed() {
         super.onBackPressed();
 
-        sP.edit().clear().apply();
         spEditor.clear().apply();
 
     }

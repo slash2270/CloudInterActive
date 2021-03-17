@@ -80,7 +80,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         intent = new Intent(this, ContentActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
 

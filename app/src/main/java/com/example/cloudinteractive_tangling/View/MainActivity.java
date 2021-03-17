@@ -1,18 +1,26 @@
 package com.example.cloudinteractive_tangling.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.cloudinteractive_tangling.R;
 
+import java.util.Set;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Intent intent;
     private Button btnStart;
+    private SharedPreferences sP;
+    private SharedPreferences .Editor spEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
 
+        sP = this.getSharedPreferences("gvScroll", MODE_PRIVATE);
+
+        spEditor = sP.edit();
+        spEditor.clear().apply();
 
         btnStart = findViewById(R.id.btnStart);
 
@@ -42,9 +54,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         intent = new Intent(this,ContentActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        spEditor.clear().apply();
+
+    }
 }

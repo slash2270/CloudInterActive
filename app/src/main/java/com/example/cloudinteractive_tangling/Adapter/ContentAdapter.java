@@ -37,7 +37,7 @@ public class ContentAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return arrListContent.size();
+        return arrListContent == null ? 0 : arrListContent.size();
     }
 
     @Override
