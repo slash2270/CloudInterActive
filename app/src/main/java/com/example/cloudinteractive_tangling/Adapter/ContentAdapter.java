@@ -64,9 +64,7 @@ public class ContentAdapter extends BaseAdapter {
 
         ArrContentItem arrContentItem = new ArrContentItem(strId, strTitle, strThumUrl, strThumColor, position, arrListContent);
 
-        ContentItem contentItem = arrListContent.get(position);
-
-        if (contentItem != null) {
+        if (arrContentItem != null) {
 
             strId = arrContentItem.getArrStrId(arrListContent, position, strId);
             strTitle = arrContentItem.getArrStrTitle(arrListContent, position, strTitle);
