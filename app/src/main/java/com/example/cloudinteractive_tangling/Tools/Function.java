@@ -54,7 +54,7 @@ public class Function {
         tvId.setText(strId);
         tvTitle.setText(strTitle);
         tvUrl.setText(strThumUrl);
-    //    ivColor.setBackgroundColor(Color.parseColor(strThumColor));  // <---ImageView bug???
+        ivColor.setBackgroundColor(Color.parseColor(strThumColor));  // <---ImageView bug???
 
     }
 
