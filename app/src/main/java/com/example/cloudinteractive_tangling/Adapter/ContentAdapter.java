@@ -71,7 +71,7 @@ public class ContentAdapter extends BaseAdapter {
             strThumUrl = arrContentItem.getArrStrthumbnailUrl(arrListContent, position, strThumUrl);
             strThumColor = arrContentItem.getArrStrThumColor(arrListContent, position, strThumColor);
 
-            function.setField(tvId, tvTitle, tvUrl, ivColor, strId, strTitle, strThumUrl, strThumColor); // <---ImageView bug???
+            function.setField(tvId, tvTitle, tvUrl, ivColor, strId, strTitle, strThumUrl, strThumColor);
 
             rltColor.setBackgroundColor(Color.parseColor(strThumColor));// 暫時用Layout來補
 
