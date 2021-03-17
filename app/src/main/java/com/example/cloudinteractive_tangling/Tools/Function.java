@@ -72,7 +72,7 @@ public class Function {
 
     }
 
-     public String getBackgroudColor(String color,String url){ // 取顏色
+     public String getBackgroudColor(String color,String url){
 
              color = "#" + url.replace("https://via.placeholder.com/150/", "").trim();
 
@@ -94,7 +94,7 @@ public class Function {
 
      }
 
-     public String getUrl(String url){ // 取Url
+     public String getUrl(String url){
 
          url = url.replace("https://via.placeholder.com/", "").trim();
 
@@ -107,7 +107,7 @@ public class Function {
 
      }
 
-    public Integer getGvItemPosition(SharedPreferences sP, int gvPosition, GridView gridView){ //取gvPosition
+    public Integer getGvItemPosition(SharedPreferences sP, int gvPosition, GridView gridView){
 
         if(sP.getInt("gvPosition", 0) > 0) {
 
