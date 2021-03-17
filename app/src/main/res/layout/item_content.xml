@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rltItem"
+    android:id="@+id/rltColor"
     android:minHeight="?android:attr/listPreferredItemHeightLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivItem"
+        android:id="@+id/ivColor"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +31,7 @@
         android:text="id" />
 
     <TextView
-        android:id="@+id/tvthumUrl"
+        android:id="@+id/tvUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"

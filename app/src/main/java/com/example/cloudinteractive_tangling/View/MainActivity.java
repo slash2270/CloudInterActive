@@ -9,10 +9,10 @@ import com.example.cloudinteractive_tangling.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnStart;
     private Intent intent;
+    private Button btnStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,22 +21,29 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
 
+        mainClickcontent();
+
     }
 
     private void initView() {
 
-        intent = new Intent(MainActivity.this,ContentActivity.class);
 
         btnStart = findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+    }
 
-            }
-        });
+    private void mainClickcontent(){
+
+        btnStart.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        intent = new Intent(this,ContentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
 
     }
 

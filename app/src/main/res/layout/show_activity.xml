@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rltShow"
+    android:id="@+id/rltColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.ShowActivity">
 
     <ImageView
-        android:id="@+id/ivShow"
+        android:id="@+id/ivColor"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,13 +19,13 @@
         android:id="@+id/tvId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvthumUrl"
+        android:layout_above="@+id/tvUrl"
         android:layout_centerHorizontal="true"
         android:textSize="16sp"
         android:text="id" />
 
     <TextView
-        android:id="@+id/tvthumUrl"
+        android:id="@+id/tvUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -36,7 +36,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvthumUrl"
+        android:layout_below="@id/tvUrl"
         android:layout_centerHorizontal="true"
         android:textSize="10sp"
         android:text="title" />
