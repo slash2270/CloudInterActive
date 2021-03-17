@@ -49,20 +49,6 @@ public class Function {
 
     }
 
-    public Button getButton(View view, Context context, int intResource, Button button){
-
-        button = view.findViewById(intResource);
-        return button;
-
-    }
-
-    public GridView getGridView(View view, Context context, int intResource, GridView gridView){
-
-        gridView = view.findViewById(intResource);
-        return gridView;
-
-    }
-
     public void setField(TextView tvId, TextView tvTitle, TextView tvUrl, ImageView ivColor,String strId, String strTitle, String strThumUrl, String strThumColor){ // 不想重複寫
 
         tvId.setText(strId);
