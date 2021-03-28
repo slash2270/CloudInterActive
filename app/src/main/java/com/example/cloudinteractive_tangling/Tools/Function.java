@@ -116,6 +116,8 @@ public class Function {
 
         gridView.setAdapter(contentAdapter);
 
+        contentAdapter.notifyDataSetChanged();
+
     }
 
 }

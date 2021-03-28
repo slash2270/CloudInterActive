@@ -77,8 +77,6 @@ public class ContentAdapter extends BaseAdapter {
 
         }
 
-    //        notifyDataSetChanged();
-
         return convertView;
 
     }
