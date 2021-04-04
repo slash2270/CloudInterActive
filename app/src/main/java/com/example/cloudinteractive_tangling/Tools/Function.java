@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -94,17 +92,13 @@ public class Function {
 
      }
 
-    public Integer getGvItemPosition(SharedPreferences sP, int gvPosition, GridView gridView){
+    public Integer scrollGvPosition(SharedPreferences sP, int gvPosition, GridView gridView){
 
-        if(sP.getInt("gvPosition", 0) > 0) {
+        gvPosition = sP.getInt("gvPosition", 0);
 
-            gvPosition = sP.getInt("gvPosition", 0);
-
-            gridView.setSelection(gvPosition);
+        gridView.smoothScrollToPosition(gvPosition);
 
         //        Log.d(TAG,"取值 gvPosition +" + gvPosition);
-
-        }
 
         return gvPosition;
 

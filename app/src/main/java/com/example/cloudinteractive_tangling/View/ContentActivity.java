@@ -3,8 +3,13 @@ package com.example.cloudinteractive_tangling.View;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -27,11 +32,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ContentActivity extends AppCompatActivity{
+public class ContentActivity extends AppCompatActivity {
 
     private ArrContentItem arrContentItem;
     private Function function;
@@ -41,8 +47,8 @@ public class ContentActivity extends AppCompatActivity{
     private GridView gvContent;
     private ContentAdapter contentAdapter;
     private ArrayList<ContentItem> arrListContent;
-    private String strId,strTitle,strThumUrl,strThumColor;
-    private int i,gvPosition;
+    private String strId, strTitle, strThumUrl, strThumColor;
+    private int i, gvPosition;
     private SharedPreferences.Editor spEditor;
     private SharedPreferences sP;
 
@@ -55,15 +61,15 @@ public class ContentActivity extends AppCompatActivity{
 
         gvItemClick();
 
-        function.getGvItemPosition(sP, gvPosition, gvContent);
-
         gvScrollChange();
+
+        function.scrollGvPosition(sP, gvPosition, gvContent);
 
         getData();
 
     }
 
-    private void initView(){
+    private void initView() {
 
         context = getApplicationContext();
 
@@ -83,11 +89,11 @@ public class ContentActivity extends AppCompatActivity{
 
         bundle = new Bundle();
 
-        RequestQueue requestQueue= Volley.newRequestQueue(context);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
 
         String apiUrl = "https://jsonplaceholder.typicode.com/photos";
 
-        JsonArrayRequest jsonArrayRequest =new JsonArrayRequest(Request.Method.GET, apiUrl, null,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, apiUrl, null,
                 new Response.Listener<JSONArray>() {
 
                     @Override
@@ -99,34 +105,34 @@ public class ContentActivity extends AppCompatActivity{
 
                             for (i = 0; i < response.length(); i++) {
 
-                                    //    Log.d(function.TAG,"取得圈數 ="+ i);
+                                //    Log.d(function.TAG,"取得圈數 ="+ i);
 
-                                    JSONObject jsonObjContent = response.getJSONObject(i);
+                                JSONObject jsonObjContent = response.getJSONObject(i);
 
-                                    //    Log.d(function.TAG,"取得JSONObj ="+ jsonObjContent.toString().trim());
+                                //    Log.d(function.TAG,"取得JSONObj ="+ jsonObjContent.toString().trim());
 
-                                    strId = jsonObjContent.get("id").toString().trim();
-                                    strTitle = jsonObjContent.get("title").toString().trim();
-                                    strThumUrl = jsonObjContent.get("thumbnailUrl").toString().trim();
-                                    strThumColor = function.getBackgroudColor(strThumColor, strThumUrl);
-                                    strThumUrl = function.getUrl(strThumUrl);
+                                strId = jsonObjContent.get("id").toString().trim();
+                                strTitle = jsonObjContent.get("title").toString().trim();
+                                strThumUrl = jsonObjContent.get("thumbnailUrl").toString().trim();
+                                strThumColor = function.getBackgroudColor(strThumColor, strThumUrl);
+                                strThumUrl = function.getUrl(strThumUrl);
 
-                                    arrListContent.add(new ContentItem(strId, strTitle, strThumUrl, strThumColor));
-                                    arrContentItem = new ArrContentItem(strId, strTitle, strThumUrl, strThumColor, i, arrListContent);
+                                arrListContent.add(new ContentItem(strId, strTitle, strThumUrl, strThumColor));
+                                arrContentItem = new ArrContentItem(strId, strTitle, strThumUrl, strThumColor, i, arrListContent);
 
-                                  //      Log.d(function.TAG,"取得strThumColor =" + strThumColor.toString().trim());
+                                //      Log.d(function.TAG,"取得strThumColor =" + strThumColor.toString().trim());
 
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
 
-                       //     Log.d(function.TAG,"錯誤 JsonE");
+                            //     Log.d(function.TAG,"錯誤 JsonE");
                         }
 
-                            function.setGvAdapter(contentAdapter, ContentActivity.this, context, arrListContent, gvContent);
+                        function.setGvAdapter(contentAdapter, ContentActivity.this, context, arrListContent, gvContent);
 
-                            gvScrollChange();
+                        gvScrollChange();
 
                     }
                 }, new Response.ErrorListener() {
@@ -140,7 +146,7 @@ public class ContentActivity extends AppCompatActivity{
 
     }
 
-    private void gvItemClick(){
+    private void gvItemClick() {
 
         gvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -153,7 +159,7 @@ public class ContentActivity extends AppCompatActivity{
                 strThumColor = arrContentItem.getArrStrThumColor(arrListContent, position, strThumColor);
 
                 intent = new Intent(ContentActivity.this, ShowActivity.class);
-            //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 bundle.putString("idKey", strId);
                 bundle.putString("titleKey", strTitle);
@@ -170,39 +176,32 @@ public class ContentActivity extends AppCompatActivity{
 
     }
 
-    private void gvScrollChange(){
+    private void gvScrollChange() {
 
         gvContent.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                switch (scrollState){
+                switch (scrollState) {
 
                     case 0:      //靜止
 
                         gvPosition = view.getFirstVisiblePosition();
-
-                        spEditor.putInt("gvPosition", gvPosition).commit();
+                        spEditor.putInt("gvPosition", gvPosition).apply();
 
                         break;
 
                     case 1:      //手滑
 
                         gvPosition = view.getFirstVisiblePosition();
-
-                        spEditor.putInt("gvPosition", gvPosition).commit();
+                        spEditor.putInt("gvPosition", gvPosition).apply();
+                    //    Log.d(Function.TAG," gvPosition +" + String.valueOf(gvPosition));
 
                         break;
 
                     case 2:      //自動滑
 
-                        gvPosition = view.getFirstVisiblePosition();
-
-                        spEditor.putInt("gvPosition", gvPosition).commit();
-
                         break;
-
-                    //     Log.d(function.TAG,"送值 gvPosition +" + gvPosition);
 
                 }
 
@@ -211,17 +210,40 @@ public class ContentActivity extends AppCompatActivity{
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+
             }
 
         });
 
     }
 
+
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+
+            long currentTime = new Date().getTime();
+
+            if(event.getRepeatCount() == 0){
+
+                gvContent.smoothScrollToPosition(sP.getInt("gvPosition", 0));
+
+                return false;
+
+            }
+
+        }
 
         spEditor.clear().apply();
+
+        intent = new Intent(ContentActivity.this, MainActivity.class);
+
+        startActivity(intent);
+
+        finish();
+
+        return super.onKeyDown(keyCode, event);
 
     }
 

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.cloudinteractive_tangling.R;
 
+import java.util.Date;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
@@ -65,4 +66,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spEditor.clear().apply();
 
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        long currentTime = new Date().getTime();
+
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+
+            if(event.getRepeatCount() == 0){
+
+
+
+            }else if(event.getRepeatCount() == 1){
+
+
+            }
+
+            System.exit(0);
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
 }

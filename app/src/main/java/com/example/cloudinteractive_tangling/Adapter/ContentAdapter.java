@@ -1,10 +1,14 @@
 package com.example.cloudinteractive_tangling.Adapter;
 
+        import android.app.ActionBar;
         import android.app.Activity;
         import android.content.Context;
+        import android.content.res.Resources;
         import android.graphics.Color;
+        import android.view.Display;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.widget.AbsListView;
         import android.widget.BaseAdapter;
         import android.widget.ImageView;
         import android.widget.RelativeLayout;
@@ -76,6 +80,12 @@ public class ContentAdapter extends BaseAdapter {
             rltColor.setBackgroundColor(Color.parseColor(strThumColor));// 暫時用Layout來補
 
         }
+
+        int itemHeight = convertView.getResources().getDisplayMetrics().heightPixels / 8;
+        int itemWidth = convertView.getResources().getDisplayMetrics().widthPixels / 4;
+
+        AbsListView.LayoutParams param = new AbsListView.LayoutParams(itemWidth, itemHeight);
+        convertView.setLayoutParams(param);
 
         return convertView;
 
