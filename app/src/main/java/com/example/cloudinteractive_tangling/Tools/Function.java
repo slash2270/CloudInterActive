@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,8 +16,11 @@ import android.widget.TextView;
 
 import com.example.cloudinteractive_tangling.Adapter.ContentAdapter;
 import com.example.cloudinteractive_tangling.Data.ContentItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import androidx.annotation.RequiresApi;
 
 public class Function {
 
@@ -92,9 +98,7 @@ public class Function {
 
      }
 
-    public Integer scrollGvPosition(SharedPreferences sP, int gvPosition, GridView gridView){
-
-        gvPosition = sP.getInt("gvPosition", 0);
+    public Integer scrollGvPosition(int gvPosition, GridView gridView){
 
         gridView.smoothScrollToPosition(gvPosition);
 
@@ -111,6 +115,20 @@ public class Function {
         gridView.setAdapter(contentAdapter);
 
         contentAdapter.notifyDataSetChanged();
+
+    }
+
+    public void fabHide(FloatingActionButton fab) {
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) fab.getLayoutParams();
+
+        fab.animate().translationY(fab.getHeight()+layoutParams.bottomMargin).setInterpolator(new AccelerateInterpolator(3));
+
+    }
+
+    public void fabShow(FloatingActionButton fab) {
+
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
 
     }
 

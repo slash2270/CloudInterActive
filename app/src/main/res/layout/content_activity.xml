@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,4 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabContent"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitCenter"
+        app:pressedTranslationZ="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/purple_700"
+        app:backgroundTint="@color/purple_700"
+        app:rippleColor="@color/purple_700"
+        android:duplicateParentState="true"
+        android:src="@color/purple_700"
+        app:fabSize="mini"
+        android:contentDescription="TODO"
+        app:layout_behavior=""
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

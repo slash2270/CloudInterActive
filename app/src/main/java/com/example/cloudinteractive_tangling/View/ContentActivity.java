@@ -3,13 +3,10 @@ package com.example.cloudinteractive_tangling.View;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -26,18 +23,19 @@ import com.example.cloudinteractive_tangling.Data.ArrContentItem;
 import com.example.cloudinteractive_tangling.Data.ContentItem;
 import com.example.cloudinteractive_tangling.R;
 import com.example.cloudinteractive_tangling.Tools.Function;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ContentActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ArrContentItem arrContentItem;
     private Function function;
@@ -47,10 +45,12 @@ public class ContentActivity extends AppCompatActivity {
     private GridView gvContent;
     private ContentAdapter contentAdapter;
     private ArrayList<ContentItem> arrListContent;
-    private String strId, strTitle, strThumUrl, strThumColor;
+    private String strId, strTitle, strThumUrl, strThumColor, newStrPosition, oldStrPosition;
     private int i, gvPosition;
     private SharedPreferences.Editor spEditor;
     private SharedPreferences sP;
+    private FloatingActionButton fabContent;
+    private ArrayList<String> arrPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,11 +59,9 @@ public class ContentActivity extends AppCompatActivity {
 
         initView();
 
-        gvItemClick();
+        setTouchClick();
 
         gvScrollChange();
-
-        function.scrollGvPosition(sP, gvPosition, gvContent);
 
         getData();
 
@@ -82,6 +80,18 @@ public class ContentActivity extends AppCompatActivity {
         spEditor = sP.edit();
 
         gvContent = findViewById(R.id.gvContent);
+
+        fabContent = findViewById(R.id.fabContent);
+
+    }
+
+    private void setTouchClick(){
+
+        fabContent.setOnTouchListener(this);
+
+        fabContent.setOnClickListener(this);
+
+        gvContent.setOnItemClickListener(this);
 
     }
 
@@ -132,8 +142,6 @@ public class ContentActivity extends AppCompatActivity {
 
                         function.setGvAdapter(contentAdapter, ContentActivity.this, context, arrListContent, gvContent);
 
-                        gvScrollChange();
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -143,36 +151,6 @@ public class ContentActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonArrayRequest);
-
-    }
-
-    private void gvItemClick() {
-
-        gvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                strId = arrContentItem.getArrStrId(arrListContent, position, strId);
-                strTitle = arrContentItem.getArrStrTitle(arrListContent, position, strTitle);
-                strThumUrl = arrContentItem.getArrStrthumbnailUrl(arrListContent, position, strThumUrl);
-                strThumColor = arrContentItem.getArrStrThumColor(arrListContent, position, strThumColor);
-
-                intent = new Intent(ContentActivity.this, ShowActivity.class);
-                //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                bundle.putString("idKey", strId);
-                bundle.putString("titleKey", strTitle);
-                bundle.putString("urlKey", strThumUrl);
-                bundle.putString("colorKey", strThumColor);
-
-                //     Log.d(function.TAG, "取得strThumUrl =" + strThumUrl);
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
 
     }
 
@@ -186,16 +164,39 @@ public class ContentActivity extends AppCompatActivity {
 
                     case 0:      //靜止
 
-                        gvPosition = view.getFirstVisiblePosition();
-                        spEditor.putInt("gvPosition", gvPosition).apply();
+                        fabContent.show();
+                        //    function.fabShow(fabContent);
 
                         break;
 
                     case 1:      //手滑
 
-                        gvPosition = view.getFirstVisiblePosition();
-                        spEditor.putInt("gvPosition", gvPosition).apply();
-                    //    Log.d(Function.TAG," gvPosition +" + String.valueOf(gvPosition));
+                        fabContent.hide();
+                        //    function.fabHide(fabContent);
+
+                        gvPosition = view.getFirstVisiblePosition() + 4;
+
+                        newStrPosition = String.valueOf(gvPosition);
+
+                        if(!sP.getString("gvPosition", "").equals("")){
+
+                            oldStrPosition = sP.getString("gvPosition", "");
+
+                            arrPosition = new ArrayList<>(Arrays.asList(oldStrPosition));
+
+                        }else {
+
+                            arrPosition = new ArrayList<>();
+
+                        }
+
+                        arrPosition.add(newStrPosition);
+
+                        newStrPosition = arrPosition.toString();
+
+                        spEditor.putString("gvPosition", newStrPosition).apply();
+
+                        arrPosition.clear();
 
                         break;
 
@@ -210,26 +211,52 @@ public class ContentActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+            /*    if ((firstVisibleItem % 32) == 0 && firstVisibleItem > 31){ // 仿ig效果
+
+                    gvContent.smoothScrollToPosition(firstVisibleItem);
+
+                }*/
 
             }
 
         });
 
-    }
+        function.scrollGvPosition(gvPosition, gvContent);
 
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 
-            long currentTime = new Date().getTime();
-
             if(event.getRepeatCount() == 0){
 
-                gvContent.smoothScrollToPosition(sP.getInt("gvPosition", 0));
+                if(gvContent.getFirstVisiblePosition() == 0){
 
-                return false;
+                }else{
+
+                    oldStrPosition = sP.getString("gvPosition", "");
+
+                    arrPosition = new ArrayList<String>(Arrays.asList(oldStrPosition.split(",")));
+
+                    oldStrPosition = arrPosition.get(arrPosition.size() - 2);
+                    oldStrPosition = oldStrPosition.replace("[", "").replace("]", "").replace(",", "").trim();
+
+                    gvPosition = Integer.parseInt(oldStrPosition);
+
+                    if(gvPosition == 4){
+
+                        gvContent.smoothScrollToPosition(0, 0);
+
+                    }else {
+
+                        gvContent.smoothScrollToPosition(gvPosition);
+
+                    }
+                    return false;
+
+                }
 
             }
 
@@ -237,13 +264,55 @@ public class ContentActivity extends AppCompatActivity {
 
         spEditor.clear().apply();
 
-        intent = new Intent(ContentActivity.this, MainActivity.class);
-
-        startActivity(intent);
-
-        finish();
-
         return super.onKeyDown(keyCode, event);
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        switch (v.getId()){
+
+            case R.id.fabContent:
+                function.scrollGvPosition(0, gvContent);
+                break;
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+
+            case R.id.fabContent:
+                function.scrollGvPosition(0, gvContent);
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        strId = arrContentItem.getArrStrId(arrListContent, position, strId);
+        strTitle = arrContentItem.getArrStrTitle(arrListContent, position, strTitle);
+        strThumUrl = arrContentItem.getArrStrthumbnailUrl(arrListContent, position, strThumUrl);
+        strThumColor = arrContentItem.getArrStrThumColor(arrListContent, position, strThumColor);
+
+        intent = new Intent(ContentActivity.this, ShowActivity.class);
+
+        bundle.putString("idKey", strId);
+        bundle.putString("titleKey", strTitle);
+        bundle.putString("urlKey", strThumUrl);
+        bundle.putString("colorKey", strThumColor);
+
+        intent.putExtras(bundle);
+        startActivity(intent);
 
     }
 
