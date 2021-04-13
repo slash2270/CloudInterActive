@@ -1,4 +1,4 @@
-package com.example.cloudinteractive_tangling.Tools;
+package com.example.cloudinteractive_tangling.tools;
 
 import junit.framework.TestCase;
 

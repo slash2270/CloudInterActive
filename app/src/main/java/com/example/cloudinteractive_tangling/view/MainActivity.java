@@ -1,36 +1,37 @@
-package com.example.cloudinteractive_tangling.View;
+package com.example.cloudinteractive_tangling.view;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.cloudinteractive_tangling.R;
+import com.example.cloudinteractive_tangling.viewmodel.MainViewModel;
+import com.example.cloudinteractive_tangling.databinding.MainActivityBinding;
 
-import java.util.Date;
-import java.util.Set;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity{
 
-    private Intent intent;
-    private Button btnStart;
     private SharedPreferences sP;
     private SharedPreferences .Editor spEditor;
+    private MainActivityBinding binding;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         initView();
 
-        mainClickcontent();
+        viewModel = new MainViewModel();
+
+        viewModel.setTvBtn(binding, this);
+
+        viewModel.mainClickcontent(binding, this);
+
+        binding.setModel(viewModel);
 
     }
 
@@ -40,22 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         spEditor = sP.edit();
         spEditor.clear().apply();
-
-        btnStart = findViewById(R.id.btnStart);
-
-    }
-
-    private void mainClickcontent(){
-
-        btnStart.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        intent = new Intent(this,ContentActivity.class);
-        startActivity(intent);
 
     }
 

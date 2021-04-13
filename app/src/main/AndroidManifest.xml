@@ -16,7 +16,7 @@
         android:theme="@style/Theme.CloudInterActive_TangLing">
 
         <activity
-            android:name=".View.MainActivity"
+            android:name=".view.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
@@ -29,14 +29,14 @@
         </activity>
 
         <activity
-            android:name=".View.ContentActivity"
+            android:name=".view.ContentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.CloudInterActive_TangLing" />
 
         <activity
-            android:name=".View.ShowActivity"
+            android:name=".view.ShowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
