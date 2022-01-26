@@ -6,20 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 
 import com.example.cloudinteractive_tangling.data.ContentBean;
 import com.example.cloudinteractive_tangling.data.DataModel;
 import com.example.cloudinteractive_tangling.tools.Function;
 import com.example.cloudinteractive_tangling.view.ShowActivity;
 import com.example.cloudinteractive_tangling.databinding.ContentActivityBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 import androidx.lifecycle.ViewModel;
 
@@ -31,20 +27,14 @@ public class ContentViewModel extends ViewModel implements DataModel.SetArrayLis
     private SharedPreferences sP;
     private DataModel dataModel;
     private Function function;
-    private Context context;
     private Intent intent;
     private Bundle bundle;
-    private FloatingActionButton fabContent;
     private ArrayList<ContentBean> arrContent;
     private ArrayList<String> arrPosition;
     private String strId, strTitle, strUrl, strColor, newStrPosition, oldStrPosition;
-    private int i, gvPosition;
-    private Handler handler;
-    private Runnable runnable;
+    private int gvPosition;
 
-    public void initView(Activity activity) {
-
-        context = activity.getApplicationContext();
+    public void initView(Context context) {
 
         dataModel = new DataModel();
 
@@ -54,46 +44,30 @@ public class ContentViewModel extends ViewModel implements DataModel.SetArrayLis
 
         arrContent = new ArrayList<>();
 
-        handler = new Handler();
-
         sP = context.getSharedPreferences("gvScroll", MODE_PRIVATE);
 
         spEditor = sP.edit();
 
     }
 
-    public void getData(Activity activity, ContentActivityBinding binding){
+    public void getData(Context context, ContentActivityBinding binding, Handler handler, Runnable runnable){
 
-        dataModel.getData(this, binding, context, activity);
+        dataModel.getData(this, binding, context, handler, runnable);
 
     }
 
-    public void setTouchClick(ContentActivityBinding binding){
+    public void setTouchClick(ContentActivityBinding binding, Handler handler, Runnable runnable){
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
+        runnable = () -> {
 
-                binding.fabContent.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+            binding.fabContent.setOnTouchListener((v, event) -> {
 
-                        function.scrollGvPosition(0, binding.gvContent);
+                function.scrollGvPosition(0, binding.gvContent);
 
-                        return false;
-                    }
-                });
+                return false;
+            });
 
-                binding.fabContent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        function.scrollGvPosition(0, binding.gvContent);
-
-                    }
-                });
-
-            }
+            binding.fabContent.setOnClickListener(v -> function.scrollGvPosition(0, binding.gvContent));
 
         };
 
@@ -101,80 +75,77 @@ public class ContentViewModel extends ViewModel implements DataModel.SetArrayLis
 
     }
 
-    public void gvScrollChange(ContentActivityBinding binding) {
+    public void gvScrollChange(ContentActivityBinding binding, Handler handler, Runnable runnable) {
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
+        runnable = () -> {
 
-                binding.gvContent.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+            binding.gvContent.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                        switch (scrollState) {
+                    switch (scrollState) {
 
-                            case 0:      //靜止
+                        case 0:      //靜止
 
-                                binding.fabContent.show();
-                                //    function.fabShow(fabContent);
+                            binding.fabContent.show();
+                            //    function.fabShow(fabContent);
 
-                                break;
+                            break;
 
-                            case 1:      //手滑
+                        case 1:      //手滑
 
-                                binding.fabContent.hide();
-                                //    function.fabHide(fabContent);
+                            binding.fabContent.hide();
+                            //    function.fabHide(fabContent);
 
-                                gvPosition = view.getFirstVisiblePosition() + 4;
+                            gvPosition = view.getFirstVisiblePosition() + 4;
 
-                                newStrPosition = String.valueOf(gvPosition);
+                            newStrPosition = String.valueOf(gvPosition);
 
-                                if(!sP.getString("gvPosition", "").equals("")){
+                            if(!sP.getString("gvPosition", "").equals("")){
 
-                                    oldStrPosition = sP.getString("gvPosition", "");
+                                oldStrPosition = sP.getString("gvPosition", "");
 
-                                    arrPosition = new ArrayList<>(Arrays.asList(oldStrPosition));
+                                arrPosition = new ArrayList<>(Collections.singletonList(oldStrPosition));
 
-                                }else {
+                            }else {
 
-                                    arrPosition = new ArrayList<>();
+                                arrPosition = new ArrayList<>();
 
-                                }
+                            }
 
-                                arrPosition.add(newStrPosition);
+                            arrPosition.add(newStrPosition);
 
-                                newStrPosition = arrPosition.toString();
+                            newStrPosition = arrPosition.toString();
 
-                                spEditor.putString("gvPosition", newStrPosition).apply();
+                            spEditor.putString("gvPosition", newStrPosition).apply();
 
-                                arrPosition.clear();
+                            arrPosition.clear();
 
-                                break;
+                            break;
 
-                            case 2:      //自動滑
+                        case 2:      //自動滑
 
-                                break;
-
-                        }
+                            break;
 
                     }
 
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                }
 
-            /*    if ((firstVisibleItem % 32) == 0 && firstVisibleItem > 31){ // 仿ig效果
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                    gvContent.smoothScrollToPosition(firstVisibleItem);
+        /*    if ((firstVisibleItem % 32) == 0 && firstVisibleItem > 31){ // 仿ig效果
 
-                }*/
+                gvContent.smoothScrollToPosition(firstVisibleItem);
 
-                    }
+            }*/
 
-                });
+                }
 
-                function.scrollGvPosition(gvPosition, binding.gvContent);
+            });
 
-            }
+            function.scrollGvPosition(gvPosition, binding.gvContent);
+
         };
 
         handler.post(runnable);
@@ -182,44 +153,32 @@ public class ContentViewModel extends ViewModel implements DataModel.SetArrayLis
     }
 
     @Override
-    public ArrayList<ContentBean> getArrayList(ArrayList<ContentBean> arrayList) {
+    public void getArrayList(ArrayList<ContentBean> arrayList) {
 
         arrContent = arrayList ;
 
-        return arrContent;
-
     }
 
-    public void onItemClick(ContentActivityBinding binding, Activity activity){
+    public void onItemClick(ContentActivityBinding binding, Activity activity, Handler handler, Runnable runnable){
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
+        runnable = () -> binding.gvContent.setOnItemClickListener((parent, view, position, id) -> {
 
-                binding.gvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            strId = arrContent.get(position).getStrId();
+            strTitle = arrContent.get(position).getStrTitle();
+            strUrl = arrContent.get(position).getStrUrl();
+            strColor = arrContent.get(position).getStrColor();
 
-                        strId = arrContent.get(position).getStrId();
-                        strTitle = arrContent.get(position).getStrTitle();
-                        strUrl = arrContent.get(position).getStrUrl();
-                        strColor = arrContent.get(position).getStrColor();
+            intent = new Intent(activity, ShowActivity.class);
 
-                        intent = new Intent(activity, ShowActivity.class);
+            bundle.putString("idKey", strId);
+            bundle.putString("titleKey", strTitle);
+            bundle.putString("urlKey", strUrl);
+            bundle.putString("colorKey", strColor);
 
-                        bundle.putString("idKey", strId);
-                        bundle.putString("titleKey", strTitle);
-                        bundle.putString("urlKey", strUrl);
-                        bundle.putString("colorKey", strColor);
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
 
-                        intent.putExtras(bundle);
-                        activity.startActivity(intent);
-
-                    }
-                });
-
-            }
-        };
+        });
 
         handler.post(runnable);
 

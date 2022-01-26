@@ -4,24 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.view.View;
 
 import com.example.cloudinteractive_tangling.data.DataModel;
 import com.example.cloudinteractive_tangling.view.ContentActivity;
 import com.example.cloudinteractive_tangling.databinding.MainActivityBinding;
-import com.example.cloudinteractive_tangling.view.MainActivity;
 
 import androidx.databinding.ObservableBoolean;
 
 public class MainViewModel implements DataModel.addText{
 
     public ObservableBoolean ovfBtn = new ObservableBoolean(false);
-    private DataModel dataModel = new DataModel();
     public String strTv, strBtn;
 
-    public void setTvBtn(MainActivityBinding binding, Activity activity){
+    public void setTvBtn(MainActivityBinding binding){
 
-        dataModel.addText(this, activity);
+        DataModel dataModel = new DataModel();
+        dataModel.addText(this);
 
         binding.btnMain.setGravity(Gravity.CENTER);
         binding.btnMain.setTextSize(20);
@@ -39,14 +37,11 @@ public class MainViewModel implements DataModel.addText{
 
         ovfBtn.set(true);
 
-        binding.btnMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.btnMain.setOnClickListener(v -> {
 
-                Intent intent = new Intent(activity, ContentActivity.class);
-                activity.startActivity(intent);
+            Intent intent = new Intent(activity, ContentActivity.class);
+            activity.startActivity(intent);
 
-            }
         });
 
         ovfBtn.set(false);
@@ -54,20 +49,17 @@ public class MainViewModel implements DataModel.addText{
     }
 
     @Override
-    public String setTvt(String name) {
+    public void setTvt(String name) {
 
         strTv = name;
-
-        return strTv;
 
     }
 
     @Override
-    public String setBtn(String name) {
+    public void setBtn(String name) {
 
         strBtn = name;
 
-        return strBtn;
     }
 
 }

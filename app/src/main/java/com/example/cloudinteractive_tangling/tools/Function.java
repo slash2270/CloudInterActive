@@ -1,6 +1,5 @@
 package com.example.cloudinteractive_tangling.tools;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 
 public class Function {
 
-     public String getBackgroudColor(String color, String url){
+     public String getBackgroudColor(String url){
 
-             color = "#" + url.replace("https://via.placeholder.com/150/", "").trim();
+         String color = "#" + url.replace("https://via.placeholder.com/150/", "").trim();
 
              if (color.length() == 6) { //顏色補字元
 
@@ -50,17 +49,15 @@ public class Function {
 
      }
 
-    public Integer scrollGvPosition(int gvPosition, GridView gridView){
+    public void scrollGvPosition(int gvPosition, GridView gridView){
 
         gridView.smoothScrollToPosition(gvPosition);
 
-        return gvPosition;
-
     }
 
-    public void setGvAdapter(ContentAdapter contentAdapter, Activity activity, Context context, ArrayList<ContentBean> arrayList, GridView gridView){
+    public void setGvAdapter(Context context, ArrayList<ContentBean> arrayList, GridView gridView){
 
-        contentAdapter = new ContentAdapter(activity, context, arrayList);
+        ContentAdapter contentAdapter = new ContentAdapter(context, arrayList);
 
         gridView.setAdapter(contentAdapter);
 

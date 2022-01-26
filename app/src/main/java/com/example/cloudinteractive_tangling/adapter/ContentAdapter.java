@@ -1,6 +1,5 @@
 package com.example.cloudinteractive_tangling.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 
 import com.example.cloudinteractive_tangling.BR;
 import com.example.cloudinteractive_tangling.data.ContentBean;
 import com.example.cloudinteractive_tangling.R;
-import com.example.cloudinteractive_tangling.databinding.ContentItemBinding;
 
 import java.util.ArrayList;
 
@@ -21,16 +18,11 @@ import androidx.databinding.DataBindingUtil;
 
 public class ContentAdapter extends BaseAdapter {
 
-    private ContentItemBinding binding;
-    private Activity activity;
-    private Context context;
-    private ArrayList<ContentBean> arrListContent;
-    public String strColor;
-    private RelativeLayout rltColor;
+    private final Context context;
+    private final ArrayList<ContentBean> arrListContent;
 
-    public ContentAdapter(Activity activity, Context context, ArrayList<ContentBean> arrListContent) {
+    public ContentAdapter(Context context, ArrayList<ContentBean> arrListContent) {
 
-        this.activity = activity;
         this.context = context;
         this.arrListContent = arrListContent;
 
@@ -54,7 +46,7 @@ public class ContentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.content_item, parent, false);
+        com.example.cloudinteractive_tangling.databinding.ContentItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.content_item, parent, false);
 
         convertView = binding.getRoot();
 

@@ -2,10 +2,10 @@ package com.example.cloudinteractive_tangling.view;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 
 import com.example.cloudinteractive_tangling.R;
-import com.example.cloudinteractive_tangling.tools.Function;
 import com.example.cloudinteractive_tangling.viewmodel.ContentViewModel;
 import com.example.cloudinteractive_tangling.databinding.ContentActivityBinding;
 
@@ -22,17 +22,15 @@ public class ContentActivity extends AppCompatActivity {
     private ContentViewModel viewModel;
     private SharedPreferences.Editor spEditor;
     private SharedPreferences sP;
-    private Function function;
-    private int gvPosition;
-    private String oldStrPosition;
-    private ArrayList<String> arrPosition;
+    private Handler handler;
+    private Runnable runData, runTouch, runScroll, runItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.content_activity);
 
-        function = new Function();
+        handler = new Handler();
 
         sP = getSharedPreferences("gvScroll", MODE_PRIVATE);
 
@@ -40,18 +38,31 @@ public class ContentActivity extends AppCompatActivity {
 
         viewModel = new ContentViewModel();
 
-        viewModel.initView(this);
+        viewModel.initView(getApplicationContext());
 
-        viewModel.getData(this, binding);
+        new Thread(() -> { // work
 
-        viewModel.setTouchClick(binding);
+            viewModel.getData(getApplicationContext(), binding, handler, runData);
 
-        viewModel.gvScrollChange(binding);
+            viewModel.setTouchClick(binding, handler, runTouch);
 
-        viewModel.onItemClick(binding, this);
+            viewModel.gvScrollChange(binding, handler, runScroll);
+
+            viewModel.onItemClick(binding, this, handler, runItem);
+
+        }).start();
 
         binding.setModel(viewModel);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacks(runData);
+        handler.removeCallbacks(runTouch);
+        handler.removeCallbacks(runScroll);
+        handler.removeCallbacks(runItem);
+        super.onDestroy();
     }
 
     @Override
@@ -61,17 +72,15 @@ public class ContentActivity extends AppCompatActivity {
 
             if(event.getRepeatCount() == 0){
 
-                if(binding.gvContent.getFirstVisiblePosition() == 0){
+                if(binding.gvContent.getFirstVisiblePosition() != 0){
 
-                }else{
+                    String oldStrPosition = sP.getString("gvPosition", "");
 
-                    oldStrPosition = sP.getString("gvPosition", "");
+                    ArrayList<String> arrPosition = new ArrayList<>(Arrays.asList(oldStrPosition.split(",")));
 
-                    arrPosition = new ArrayList<String>(Arrays.asList(oldStrPosition.split(",")));
+                    if(arrPosition.size() <= 1){
 
-                    if(arrPosition.size() == 1){
-
-                        oldStrPosition = arrPosition.get(arrPosition.size() - 1);
+                        oldStrPosition = arrPosition.get(0);
 
                     }else {
 
@@ -81,7 +90,7 @@ public class ContentActivity extends AppCompatActivity {
 
                     oldStrPosition = oldStrPosition.replace("[", "").replace("]", "").replace(",", "").trim();
 
-                    gvPosition = Integer.parseInt(oldStrPosition);
+                    int gvPosition = Integer.parseInt(oldStrPosition);
 
                     if(gvPosition == 4){
 

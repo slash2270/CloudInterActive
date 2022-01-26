@@ -6,28 +6,24 @@ import android.view.KeyEvent;
 
 import com.example.cloudinteractive_tangling.R;
 import com.example.cloudinteractive_tangling.viewmodel.MainViewModel;
-import com.example.cloudinteractive_tangling.databinding.MainActivityBinding;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 public class MainActivity extends AppCompatActivity{
 
-    private SharedPreferences sP;
     private SharedPreferences .Editor spEditor;
-    private MainActivityBinding binding;
-    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        com.example.cloudinteractive_tangling.databinding.MainActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         initView();
 
-        viewModel = new MainViewModel();
+        MainViewModel viewModel = new MainViewModel();
 
-        viewModel.setTvBtn(binding, this);
+        viewModel.setTvBtn(binding);
 
         viewModel.mainClickcontent(binding, this);
 
@@ -37,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void initView() {
 
-        sP = this.getSharedPreferences("gvScroll", MODE_PRIVATE);
+        SharedPreferences sP = this.getSharedPreferences("gvScroll", MODE_PRIVATE);
 
         spEditor = sP.edit();
         spEditor.clear().apply();
