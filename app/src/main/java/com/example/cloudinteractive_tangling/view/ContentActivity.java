@@ -3,6 +3,7 @@ package com.example.cloudinteractive_tangling.view;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 
 import com.example.cloudinteractive_tangling.R;
@@ -42,6 +43,8 @@ public class ContentActivity extends AppCompatActivity {
 
         new Thread(() -> { // work
 
+            Looper.prepare();
+
             viewModel.getData(getApplicationContext(), binding, handler, runData);
 
             viewModel.setTouchClick(binding, handler, runTouch);
@@ -49,6 +52,8 @@ public class ContentActivity extends AppCompatActivity {
             viewModel.gvScrollChange(binding, handler, runScroll);
 
             viewModel.onItemClick(binding, this, handler, runItem);
+
+            Looper.loop();
 
         }).start();
 
